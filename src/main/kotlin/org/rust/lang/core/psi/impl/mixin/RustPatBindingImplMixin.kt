@@ -14,7 +14,10 @@ import org.rust.lang.core.psi.impl.RustNamedElementImpl
 import org.rust.lang.core.psi.impl.RustParameterElementImpl
 
 abstract class RustPatBindingImplMixin(node: ASTNode) : RustNamedElementImpl(node),
-                                                        RustPatBindingElement {
+                                                        RustPatBindingElement,
+                                                        PsiNameIdentifierOwner {
+
+    override fun getNameIdentifier(): PsiElement = identifier
 
     override fun getNavigationElement(): PsiElement = identifier
 

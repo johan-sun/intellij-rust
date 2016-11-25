@@ -3,6 +3,8 @@ package org.rust.lang.core.psi
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.PsiParserFacade
+import com.intellij.psi.impl.PsiParserFacadeImpl
 import org.rust.lang.RustLanguage
 import org.rust.lang.core.psi.util.childOfType
 
@@ -12,6 +14,9 @@ object RustElementFactory {
 
     fun createStatement(project: Project, statement: String): RustStmtElement? =
         createFromText(project, "fn main() { $statement 92; }")
+
+    fun createVarDeclaration(project: Project, name: String, init: RustExprElement): RustLetDeclElement =
+        createFromText(project, "fn main() { let $name = ${init.text}; }")!!
 
     fun createModDeclItem(project: Project, modName: String): RustModDeclItemElement? =
         createFromText(project, "mod $modName;")
@@ -74,4 +79,6 @@ object RustElementFactory {
         val where = whereClause?.text ?: ""
         return "fn $name $generics (${allArguments.joinToString(",")}) $ret $where"
     }
+
+    fun newLine(project: Project): PsiElement = PsiParserFacade.SERVICE.getInstance(project).createWhiteSpaceFromText("\n")
 }
